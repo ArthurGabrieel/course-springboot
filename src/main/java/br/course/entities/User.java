@@ -1,11 +1,15 @@
 package br.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
+@Table(name = "tb_user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -17,6 +21,10 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String phone;
+
+    @JsonIgnore // não retornar a lista de pedidos
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 
     public User() {
     }
@@ -75,6 +83,10 @@ public class User implements Serializable {
         if (!(o instanceof User)) return false;
         User user = (User) o;
         return getId().equals(user.getId());
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 
     @Override
